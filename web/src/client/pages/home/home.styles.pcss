@@ -1,0 +1,56 @@
+@import 'variables.pcss';
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.input-box {
+  max-width: 640px;
+}
+
+.analyze-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: initial;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 15px;
+  width: 175px;
+
+  &:disabled {
+    background: #a3d1ff;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.button-container {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.spinner {
+  animation: \spin 3s infinite linear;
+}
+
+.table-container {
+  margin: 40px 0;
+}
+
+.color-cell {
+  display: flex;
+  align-items: center;
+}
+
+.color-preview {
+  width: 20px;
+  height: 20px;
+  border: 2px solid black;
+  margin-right: 6px;
+}

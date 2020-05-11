@@ -1,0 +1,61 @@
+@import 'variables.pcss';
+
+.upload-text {
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 24px;
+  color: #191919;
+  margin: 0 4px;
+
+  .types {
+    color: #a7a7a7;
+    margin-left: 5px;
+  }
+}
+
+.file-dropzone {
+  display: flex;
+  align-items: center;
+  height: 80px;
+  border: 1px dashed #D1D1D1;
+  box-sizing: border-box;
+  cursor: pointer;
+  padding: 28px 16px;
+
+  &.error {
+    border-color: #FF3C5A;
+  }
+
+  &:hover {
+    background: #EFF2FF;
+  }
+}
+
+.drag-active {
+  background: #EFF2FF;
+}
+
+.container {
+  margin-bottom: 24px;
+}
+
+.upload-icon {
+  margin: 4px;
+}
+
+.preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-top: 16px;
+}
+
+.error-text {
+  font-size: 14px;
+  line-height: 24px;
+  margin: 8px;
+
+  color: #FF3C5A;
+}

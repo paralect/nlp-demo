@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>NLP demo</title>
+    <link rel="shortcut icon" href="/static/favicon.ico" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script>
+      window.config = {{{json config}}};
+    </script>
+
+    {{#if isDev}}
+      <script src="/static/main.js"></script>
+    {{/if}}
+  </body>
+</html>
