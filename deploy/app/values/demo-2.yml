@@ -1,0 +1,46 @@
+environment: staging
+namespace: nlp
+
+apps:
+  tf-serve:
+    deployment:
+      repository: "pvkomodey/paralect-bert-tf-serve:1.0.0"
+      replicas: 1
+      imagePullPolicy: Always
+      ports:
+        - containerPort: 8501
+          protocol: TCP
+    services:
+      - name: tf-serve
+        type: ClusterIP
+        ports:
+          - protocol: TCP
+            port: 8501
+            targetPort: 8501
+
+  papi:
+    deployment:
+      repository: "pvkomodey/paralect-sentiment-api:1.0.0"
+      replicas: 1
+      imagePullPolicy: Always
+      env:
+        - name: SERVE_API_HOST
+          value: "tf-serve.nlp-2.svc.cluster.local"
+        - name: SERVE_API_PORT
+          value: "80"
+      ports:
+        - containerPort: 8502
+          protocol: TCP
+    services:
+      - name: papi
+        type: ClusterIP
+        ports:
+          - protocol: TCP
+            port: 80
+            targetPort: 8502
+        ingress:
+          host: demo-nlp.paralect.net
+
+imageCredentials:
+  enabled: true
+  secretName: regcred
