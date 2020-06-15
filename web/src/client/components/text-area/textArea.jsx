@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import _ from 'lodash';
+import { motion } from 'framer-motion';
 
 import styles from './textArea.styles';
 
@@ -32,13 +33,13 @@ export default class TextArea extends PureComponent {
     const props = _.omit(this.props, ['className', 'errors', 'onChange', 'rows']);
 
     return (
-      <div>
+      <div className={styles.container}>
         {title && (
           <div className={styles.title}>
             {title}
           </div>
         )}
-        <textarea
+        <motion.textarea
           className={classnames(styles.textArea, className, {
             [styles.error]: errors.length,
           })}
@@ -46,6 +47,7 @@ export default class TextArea extends PureComponent {
           rows={rows}
           placeholder={placeholder}
           {...props /* eslint-disable-line react/jsx-props-no-spreading */}
+          whileTap={{ scale: 0.95 }}
         />
 
         {this.errors()}

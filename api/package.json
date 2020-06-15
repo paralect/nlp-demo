@@ -43,6 +43,7 @@
     "@paralect/email-service": "0.2.0",
     "@paralect/node-mongo": "2.0.0-beta.1",
     "app-module-path": "2.2.0",
+    "axios": "0.19.2",
     "bcrypt": "4.0.1",
     "google-auth-library": "6.0.0",
     "ibm-watson": "5.5.0",

@@ -11,29 +11,26 @@
   font-size: 16px;
   line-height: 24px;
 
-  &:hover,
-  &:focus {
-    border-color: #4361EE;
-  }
-
-  &.error {
-    border-color: var(--red-500);
-
-    &:hover,
-    &:focus {
-      border-color: var(--red-800);
-    }
+  &.error:not(:focus) {
+    border-color: #FF3C5A;
   }
 }
 
 .errors {
+  position: absolute;
+  bottom: -22px;
+  left: 15px;
   font-size: var(--text-400);
-  color: var(--red-500);
-  margin-top: var(--distance-400);
+  color: #FF3C5A;
 }
 
 .title {
+  font-weight: bold;
   font-size: 18px;
   line-height: 27px;
-  margin-bottom: 5px;
+  margin: 0 20px 7px;
+}
+
+.container {
+  position: relative;
 }

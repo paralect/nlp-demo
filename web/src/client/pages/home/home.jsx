@@ -1,15 +1,22 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
+import GridLoader from 'react-spinners/GridLoader';
+
 import * as fromAnalyze from 'resources/analyze/analyze.selectors';
 import * as analyzeActions from 'resources/analyze/analyze.actions';
+
 import FileDropzone from 'components/file-dropzone';
 import TextArea from 'components/text-area';
 import Button from 'components/button';
-import { FaSpinner } from 'react-icons/fa';
 import Table from 'components/table';
 import Tabs from 'components/tabs';
+import ProgressBar from 'components/progressBar';
+
 import { getFileByUrl } from 'helpers/helpers';
+import { EMOTIONS_EMOJIS, TEXT_LIMITS } from 'helpers/constants';
+
 import defaultImg from 'static/images/car-template.jpg';
 import defaultText from 'static/default-text.json';
 
@@ -28,8 +35,8 @@ const tabs = [{
   name: 'Categories',
   type: 'categories',
 }, {
-  name: 'Emotion',
-  type: 'emotion',
+  name: 'Emotions',
+  type: 'emotions',
 }];
 
 class Home extends PureComponent {
@@ -42,6 +49,7 @@ class Home extends PureComponent {
       text: '',
       isLoading: false,
       currentTab: this.defaultTab,
+      textLimitError: null,
     };
   }
 
@@ -51,7 +59,11 @@ class Home extends PureComponent {
   }
 
   onTextChange = (text) => {
-    this.setState({ text });
+    this.setState({ text, textLimitError: null });
+
+    if (text.length < TEXT_LIMITS.minCharacters) {
+      this.setState({ textLimitError: `Text should be longer than ${TEXT_LIMITS.minCharacters} characters` });
+    }
   }
 
   onFileChange = (file) => {
@@ -80,10 +92,10 @@ class Home extends PureComponent {
 
     const tableData = data[currentTab];
 
-    if (currentTab === 'emotion') {
-      return Object.keys(tableData.document.emotion).map((key) => ({
-        text: key,
-        confidence: tableData.document.emotion[key],
+    if (currentTab === 'emotions') {
+      return tableData.map((confidence, index) => ({
+        text: EMOTIONS_EMOJIS[index],
+        confidence: confidence.toFixed(6),
       })).sort((a, b) => Math.sign(b.confidence - a.confidence));
     }
 
@@ -101,6 +113,13 @@ class Home extends PureComponent {
     return tableData;
   }
 
+  getProgressBar = ({ value }) => (
+    <>
+      <ProgressBar className={styles.progressBar} fill={`${Math.abs(value) * 100}`} />
+      <span>{Number(value).toFixed(4)}</span>
+    </>
+  );
+
   getTableColumns = () => {
     const { currentTab } = this.state;
 
@@ -112,6 +131,7 @@ class Home extends PureComponent {
         }, {
           Header: 'Relevance',
           accessor: 'relevance',
+          Cell: this.getProgressBar,
         }];
 
       case 'concepts':
@@ -124,6 +144,7 @@ class Home extends PureComponent {
         }, {
           Header: 'Score',
           accessor: 'relevance',
+          Cell: this.getProgressBar,
         }];
 
       case 'categories':
@@ -133,15 +154,17 @@ class Home extends PureComponent {
         }, {
           Header: 'Score',
           accessor: 'score',
+          Cell: this.getProgressBar,
         }];
 
-      case 'emotion':
+      case 'emotions':
         return [{
           Header: 'Emotion',
           accessor: 'text',
         }, {
           Header: 'Confidence',
           accessor: 'confidence',
+          Cell: this.getProgressBar,
         }];
 
       case 'entities':
@@ -163,7 +186,7 @@ class Home extends PureComponent {
         }, {
           Header: 'Confidence',
           accessor: 'confidence',
-          Cell: ({ value }) => Math.round(value * 1000) / 1000,
+          Cell: this.getProgressBar,
         }];
     }
   }
@@ -175,28 +198,45 @@ class Home extends PureComponent {
   render() {
     const { data, textErrors } = this.props;
     const {
-      text, file, isLoading, currentTab,
+      text, file, isLoading, currentTab, textLimitError,
     } = this.state;
 
+    const allTextErrors = textLimitError ? textErrors.concat(textLimitError) : textErrors;
+
     return (
-      <div className={styles.page}>
-        <div className={styles.inputBox}>
-          <FileDropzone file={file} onChange={this.onFileChange} />
-          <TextArea
-            value={text}
-            onChange={this.onTextChange}
-            title="Textarea"
-            errors={textErrors}
+      <div className={cn(styles.page)}>
+        <div className={styles.loader}>
+          <GridLoader
+            size={50}
+            margin={40}
+            color="#7007babd"
+            loading={isLoading}
           />
+        </div>
+        <div className={cn(styles.inputBox, isLoading && styles.whileLoading)}>
+          <div className={styles.preview}>
+            <div>
+              <div className={styles.previewImageTitle}>Image</div>
+              <FileDropzone file={file} onChange={this.onFileChange} />
+            </div>
+            <TextArea
+              value={text}
+              onChange={this.onTextChange}
+              title="Description"
+              errors={allTextErrors}
+              className={cn(styles.previewBox, styles.previewText)}
+            />
+          </div>
+
           <div className={styles.buttonContainer}>
             <Button
-              disabled={isLoading || !text || !file}
+              disabled={isLoading || !text || !file || textLimitError}
               className={styles.analyzeButton}
               onClick={this.onAnalyze}
             >
-              {!isLoading && 'Analyze'}
-              {isLoading && (<FaSpinner size={24} className={styles.spinner} />)}
+              {!isLoading && 'Analyze This'}
             </Button>
+
           </div>
         </div>
         {data && (

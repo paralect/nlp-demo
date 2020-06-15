@@ -1,61 +1,102 @@
 @import 'variables.pcss';
 
-.upload-text {
-  font-family: Poppins;
-  font-style: normal;
-  font-weight: normal;
+.file-dropzone {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: initial;
+  font-weight: bold;
   font-size: 16px;
   line-height: 24px;
-  color: #191919;
-  margin: 0 4px;
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgb(112, 7, 186);
+  transition: width 0.2s ease-in-out;
+  border: none;
+  outline:none;
+  cursor: pointer;
+  z-index: 3;
 
-  .types {
-    color: #a7a7a7;
-    margin-left: 5px;
+  &:hover {
+    width: 300px;
+  }
+
+  &.error {
+    background: #FF3C5A;
   }
 }
 
-.file-dropzone {
-  display: flex;
-  align-items: center;
-  height: 80px;
-  border: 1px dashed #D1D1D1;
-  box-sizing: border-box;
-  cursor: pointer;
-  padding: 28px 16px;
-
-  &.error {
-    border-color: #FF3C5A;
-  }
-
-  &:hover {
-    background: #EFF2FF;
-  }
+.file-dropzone:hover .upload-title {
+  display: block;
+  white-space: nowrap;
+  margin-left: 12px;
 }
 
 .drag-active {
-  background: #EFF2FF;
+  background: #a44fdf;
 }
 
 .container {
-  margin-bottom: 24px;
+  position: relative;
+  max-width: 400px;
+  max-height: 400px;
+  height: 400px;
+  width: 400px;
 }
 
 .upload-icon {
   margin: 4px;
 }
 
+.upload-title {
+  display: none;
+}
+
 .preview {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  margin-top: 16px;
+  max-width: 400px;
+  max-height: 400px;
+  height: 400px;
+  width: 400px;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: 2px solid rgba(77,89,97,.1);object-fit: cover;
+  margin-right: 30px;
+  padding: 2px;
 }
 
 .error-text {
+  position: absolute;
+  top: 69px;
+  left: 7px;
+  padding: 4px 12px;
+  background: white;
+  opacity: 0.8;
+  border-radius: 100px;
   font-size: 14px;
   line-height: 24px;
   margin: 8px;
-
   color: #FF3C5A;
 }
+
+.file-dropzone:hover + .shade {
+  background-color: white;
+  opacity: 0.5;
+  transition: all 0.3s ease-in-out;
+}
+
+.shade {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+

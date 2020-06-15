@@ -1,4 +1,5 @@
 const validate = require('middlewares/validate');
+
 const NLPService = require('services/nlp.service');
 
 const validator = require('./validator');
@@ -9,9 +10,11 @@ const handler = async (ctx) => {
 
     const result = await NLPService.analyzeText(text);
     const vehicleColors = await NLPService.recognizeVehicleColor(image);
+    const emotions = await NLPService.analyzeEmotions(text);
 
     ctx.body = {
       ...result,
+      emotions,
       entities: [
         ...result.entities,
         ...vehicleColors,

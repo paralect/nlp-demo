@@ -7,7 +7,8 @@ export function getTextErrors({ analyze }) {
     return [];
   }
 
-  const textErrors = analyze.errors.filter((e) => !!e.text).map((e) => e.text);
+  const textErrors = analyze.errors.filter((e) => !!e.text || !!e._global).map((e) => e.text || 'Something goes wrong. Try again');
+
   return textErrors;
 }
 

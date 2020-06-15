@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { motion } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 import { getFileDataUrl } from 'helpers/helpers';
@@ -47,13 +48,26 @@ const FileDropzone = (props) => {
         })}
         {...getRootProps()}
       >
+
         <input {...getInputProps()} />
-        <FaCloudUploadAlt className={styles.uploadIcon} size={16} />
-        <div className={styles.uploadText}>
-          Upload file
-          <span className={styles.types}>PNG, JPG, Max 10Mb</span>
-        </div>
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1, 1.2, 1],
+          }}
+          transition={{
+            duration: 2,
+            ease: 'easeInOut',
+            times: [0, 0.2, 0.5, 0.8, 1],
+            loop: Infinity,
+            repeatDelay: 1,
+          }}
+        >
+          <FaCloudUploadAlt className={styles.uploadIcon} size={28} />
+        </motion.div>
+        <div className={styles.uploadTitle}>Upload another image</div>
       </div>
+      <div className={styles.shade} />
+
       {error && <div className={styles.errorText}>{error}</div>}
       {previewUrl && <img className={styles.preview} src={previewUrl} alt="preview" />}
     </div>

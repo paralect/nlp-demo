@@ -1,8 +1,11 @@
+/* eslint-disable class-methods-use-this */
 const fs = require('fs');
 const sharp = require('sharp');
+const axios = require('axios');
 const vision = require('@google-cloud/vision');
 const { NaturalLanguageUnderstandingV1 } = require('ibm-watson/sdk');
 const { IamAuthenticator } = require('ibm-watson/auth');
+
 const { rgbToHex } = require('helpers/base.helper');
 
 class NaturalLanguageProcessingService {
@@ -34,12 +37,29 @@ class NaturalLanguageProcessingService {
         concepts: {},
         entities: {},
         keywords: {},
-        emotion: {},
         semantic_roles: {},
       },
     });
 
     return response.result;
+  }
+
+  async analyzeEmotions(text) {
+    const sentencesArray = text.replace(/([.?!])\s*(?=[A-Z])/g, '$1|').split('|');
+
+    const predictionsArray = (await Promise.all(sentencesArray.map((sentence) => (
+      axios.post('http://demo-nlp.paralect.net/predict', { text: sentence })
+    )))).map((element) => (element.data.predictions.flat(1)));
+
+    const averageEmotions = predictionsArray[0].map((_col, i) => predictionsArray.map(
+      (row) => row[i],
+    ).reduce((acc, c) => acc + c, 0) / predictionsArray.length);
+
+    if (!averageEmotions) {
+      throw new Error('Not recognized');
+    }
+
+    return averageEmotions;
   }
 
   async localizeVehicle(image) {

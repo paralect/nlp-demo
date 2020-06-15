@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+import { motion } from 'framer-motion';
 
 import styles from './button.styles';
 
@@ -14,9 +15,13 @@ const colors = {
 /* eslint-disable react/button-has-type, react/jsx-props-no-spreading */
 function Button({ color, className, ...props }) {
   return (
-    <button
+    <motion.button
       className={cn(styles.button, styles[color], className)}
       {...props}
+      whileHover={{
+        scale: 1.05,
+        transition: { duration: 0.05 },
+      }}
     />
   );
 }
