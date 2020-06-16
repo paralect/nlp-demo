@@ -15,6 +15,12 @@ apps:
       env:
         - name: APP_ENV
           value: "staging"
+        - name: IBM_APIKEY
+          value: "IBM_APIKEY"
+        - name: IBM_URL
+          value: "IBM_URL"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "src/config/GOOGLE_APPLICATION_CREDENTIALS.json"
       ports:
         - containerPort: 3001
           protocol: TCP
