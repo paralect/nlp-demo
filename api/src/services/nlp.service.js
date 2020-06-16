@@ -10,7 +10,8 @@ const { rgbToHex } = require('helpers/base.helper');
 
 class NaturalLanguageProcessingService {
   constructor() {
-    const { apikey, url } = process.env.IBM_CONFIG;
+    const apikey = process.env.IBM_APIKEY;
+    const url = process.env.IBM_URL;
 
     this.ibmNLU = new NaturalLanguageUnderstandingV1({
       version: '2020-05-11',
